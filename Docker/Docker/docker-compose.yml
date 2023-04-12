@@ -1,0 +1,34 @@
+version: "3"
+services:
+
+  datascience-notebook:
+    image: jupyter/datascience-notebook:latest
+    container_name: jupyter-projekti
+    volumes:
+      - ./:/home/jovyan/work
+    ports:
+      - 8000:8888
+    environment:
+      - JUPYTER_TOKEN=
+      - GRANT_SUDO=yes
+      - JUPYTER_ENABLE_LAB=yes
+    networks:
+      - jupyterhub-network
+
+  mariadb-server:
+    container_name: mariadb-server
+    image: mariadb:latest
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=
+    volumes:
+      - ./vol-mariadb-data:/var/lib/mysql
+      - ./vol-mariadb-data:/docker-entrypoint-initdb.d
+    networks: 
+      - jupyterhub-network
+
+networks:
+  jupyterhub-network:
+volumes:
+  mariadb-data:
